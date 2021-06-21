@@ -205,4 +205,30 @@ public class Model { //содержит игровую логику и хран�
                 break;
         }
     }
+
+    public boolean hasBoardChanged(){ //отличается ли вес плиток в предыдущем состоянии игрового поля
+        Tile[][] previousState = previousStates.peek();
+
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            for (int j = 0; j < FIELD_WIDTH; j++) {
+                if (previousState[i][j].value != gameTiles[i][j].value){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public MoveEfficiency getMoveEfficiency(Move move){ //возвращает эффективность хода
+        MoveEfficiency moveEfficiency = null;
+
+        move.move(); //выполняем ход
+        if (hasBoardChanged()){ //если состояние поля изменилось
+            moveEfficiency = new MoveEfficiency(getEmptyTiles().size(), score, move);
+        }
+        else moveEfficiency = new MoveEfficiency(-1, 0, move);
+        rollback(); //отменяем ход
+
+        return moveEfficiency;
+    }
 }
