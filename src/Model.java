@@ -73,6 +73,9 @@ public class Model { //содержит игровую логику и хран�
     }
 
     public void left(){ //движение влево
+        if (isSaveNeeded)
+            saveState(gameTiles); // сохраняем текущее состояние игрового поля
+
         boolean isChanged = false;
 
         for (Tile[] tiles : gameTiles){ //сжимаем и сливаем клетки игрового поля
@@ -81,9 +84,13 @@ public class Model { //содержит игровую логику и хран�
         }
 
         if (isChanged) addTile(); //добавляем новую клетку, если ход был выполнен
+
+        isSaveNeeded = true;
     }
 
     public void up(){
+        saveState(gameTiles); // сохраняем текущее состояние игрового поля
+
         rotateClockwise();
         rotateClockwise();
         rotateClockwise();
@@ -92,6 +99,8 @@ public class Model { //содержит игровую логику и хран�
     }
 
     public void right(){
+        saveState(gameTiles); // сохраняем текущее состояние игрового поля
+
         rotateClockwise();
         rotateClockwise();
         left();
@@ -100,6 +109,8 @@ public class Model { //содержит игровую логику и хран�
     }
 
     public void down(){
+        saveState(gameTiles); // сохраняем текущее состояние игрового поля
+
         rotateClockwise();
         left();
         rotateClockwise();
@@ -169,7 +180,7 @@ public class Model { //содержит игровую логику и хран�
         isSaveNeeded = false;
     }
 
-    private void rollback(){ //устанавливает текущее игровое состояние равным последнему в стеке
+    public void rollback(){ //устанавливает текущее игровое состояние равным последнему в стеке
         if (!previousStates.isEmpty())
             gameTiles = previousStates.pop();
         if (!previousScores.isEmpty())

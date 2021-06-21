@@ -53,6 +53,9 @@ public class Controller extends KeyAdapter { //следит за нажатие�
                 case KeyEvent.VK_UP:
                     model.up();
                     break;
+                case KeyEvent.VK_Z:
+                    model.rollback();
+                    break;
             }
         }
 
