@@ -1,5 +1,6 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class Model { //содержит игровую логику и хранит игровое поле
     private static final int FIELD_WIDTH = 4; //ширина игрового поля
@@ -7,6 +8,9 @@ public class Model { //содержит игровую логику и хран�
     private Tile[][] gameTiles; //игровое поле
     protected int score; //игровой счёт
     protected int maxTile; //значение самое большой плитки
+    private Stack<Tile[][]> previousStates = new Stack<>(); //предыдущие состояния игрового поля
+    private Stack<Integer> previousScores = new Stack<>(); //предыдущие счета
+    private boolean isSaveNeeded = true; //нужно ли сохранить текущее состояние игры
 
     public Model() {
         resetGameTiles();
@@ -149,5 +153,26 @@ public class Model { //содержит игровую логику и хран�
         }
         compressTiles(tiles);
         return isChanged;
+    }
+
+    private void saveState(Tile[][] state){ //сохраняет текущее состояние игрового поля и счет в стек
+        Tile[][] temp = new Tile[FIELD_WIDTH][FIELD_WIDTH];
+
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            for (int j = 0; j < FIELD_WIDTH; j++) {
+                temp[i][j] = new Tile(state[i][j].value);
+            }
+        }
+
+        previousStates.push(temp);
+        previousScores.push(score);
+        isSaveNeeded = false;
+    }
+
+    private void rollback(){ //устанавливает текущее игровое состояние равным последнему в стеке
+        if (!previousStates.isEmpty())
+            gameTiles = previousStates.pop();
+        if (!previousScores.isEmpty())
+            score = previousScores.pop();
     }
 }
