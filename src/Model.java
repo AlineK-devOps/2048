@@ -49,21 +49,39 @@ public class Model { //содержит игровую логику и хран�
         return emptyTiles;
     }
 
-    private void compressTiles(Tile[] tiles){ //сжатие плиток
+    public void left(){ //движение влево
+        boolean isChanged = false;
+
+        for (Tile[] tiles : gameTiles){ //сжимаем и сливаем клетки игрового поля
+            if (compressTiles(tiles) | mergeTiles(tiles))
+                isChanged = true;
+        }
+
+        if (isChanged) addTile(); //добавляем новую клетку, если ход был выполнен
+    }
+
+    private boolean compressTiles(Tile[] tiles){ //сжатие плиток
+        boolean isChanged = false;
+
         for (int i = 0; i < tiles.length; i++){
             for (int j = 0; j < tiles.length - 1; j++){
-                if (tiles[j].isEmpty()){
+                if (tiles[j].isEmpty() && !tiles[j+1].isEmpty()){
                     Tile temp = tiles[j];
                     tiles[j] = tiles[j+1];
                     tiles[j+1] = temp;
+
+                    isChanged = true;
                 }
             }
         }
+        return isChanged;
     }
 
-    private void mergeTiles(Tile[] tiles){ //слияние плиток
+    private boolean mergeTiles(Tile[] tiles){ //слияние плиток
+        boolean isChanged = false;
+
         for (int i = 0; i < tiles.length - 1; i++){
-            if (tiles[i].value == tiles[i+1].value){
+            if (tiles[i].value == tiles[i+1].value && !tiles[i].isEmpty()){
                 tiles[i].value *= 2;
                 tiles[i+1].value = 0;
 
@@ -71,8 +89,11 @@ public class Model { //содержит игровую логику и хран�
                     maxTile = tiles[i].value;
 
                 score += tiles[i].value; //увеличиваем счёт
+
+                isChanged = true;
             }
         }
         compressTiles(tiles);
+        return isChanged;
     }
 }
