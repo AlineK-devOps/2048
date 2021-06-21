@@ -186,4 +186,23 @@ public class Model { //содержит игровую логику и хран�
         if (!previousScores.isEmpty())
             score = previousScores.pop();
     }
+
+    public void randomMove(){ //случайный ход
+        int randomStep = ((int)(Math.random() * 100)) % 4; //случайное число от 0 до 3
+
+        switch (randomStep){
+            case 0:
+                left();
+                break;
+            case 1:
+                right();
+                break;
+            case 2:
+                down();
+                break;
+            case 3:
+                up();
+                break;
+        }
+    }
 }
