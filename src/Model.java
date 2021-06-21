@@ -60,6 +60,41 @@ public class Model { //содержит игровую логику и хран�
         if (isChanged) addTile(); //добавляем новую клетку, если ход был выполнен
     }
 
+    public void up(){
+        rotateClockwise();
+        rotateClockwise();
+        rotateClockwise();
+        left();
+        rotateClockwise();
+    }
+
+    public void right(){
+        rotateClockwise();
+        rotateClockwise();
+        left();
+        rotateClockwise();
+        rotateClockwise();
+    }
+
+    public void down(){
+        rotateClockwise();
+        left();
+        rotateClockwise();
+        rotateClockwise();
+        rotateClockwise();
+    }
+
+    public void rotateClockwise(){ //поворот поля на 90 градусов
+        Tile[][] result = new Tile[FIELD_WIDTH][FIELD_WIDTH];
+
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            for (int j = 0; j < FIELD_WIDTH; j++) {
+                result[j][FIELD_WIDTH - 1 - i] = gameTiles[i][j];
+            }
+        }
+        gameTiles = result;
+    }
+
     private boolean compressTiles(Tile[] tiles){ //сжатие плиток
         boolean isChanged = false;
 
