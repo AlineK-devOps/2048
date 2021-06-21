@@ -25,6 +25,25 @@ public class Model { //содержит игровую логику и хран�
         addTile();
     }
 
+    public Tile[][] getGameTiles(){
+        return gameTiles;
+    }
+
+    public boolean canMove(){ //возможен ли ход
+        if (getEmptyTiles().size() != 0)
+            return true;
+
+        for (int i = 0; i < FIELD_WIDTH; i++) {
+            for (int j = 0; j < FIELD_WIDTH; j++) {
+                if ((i < FIELD_WIDTH - 1 && gameTiles[i][j].value == gameTiles[i + 1][j].value)
+                        || ((j < FIELD_WIDTH - 1) && gameTiles[i][j].value == gameTiles[i][j + 1].value)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     private void addTile(){//добавление новой активной плитки
         List<Tile> emptyTiles = getEmptyTiles();
 
