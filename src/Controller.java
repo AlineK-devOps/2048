@@ -16,6 +16,10 @@ public class Controller extends KeyAdapter { //следит за нажатие�
         return model.getGameTiles();
     }
 
+    public View getView(){
+        return view;
+    }
+
     public int getScore(){ //получить счёт
         return model.score;
     }
