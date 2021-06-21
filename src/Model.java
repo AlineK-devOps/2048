@@ -1,6 +1,4 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 public class Model { //содержит игровую логику и хранит игровое поле
     private static final int FIELD_WIDTH = 4; //ширина игрового поля
@@ -230,5 +228,16 @@ public class Model { //содержит игровую логику и хран�
         rollback(); //отменяем ход
 
         return moveEfficiency;
+    }
+
+    public void autoMove(){ //автоматически выполняет лучших из возможных ходов
+        PriorityQueue<MoveEfficiency> queue = new PriorityQueue<>(4, Collections.reverseOrder());
+
+        queue.add(getMoveEfficiency(this::left));
+        queue.add(getMoveEfficiency(this::right));
+        queue.add(getMoveEfficiency(this::up));
+        queue.add(getMoveEfficiency(this::down));
+
+        queue.peek().getMove().move();
     }
 }
