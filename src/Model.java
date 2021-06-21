@@ -5,6 +5,8 @@ public class Model { //содержит игровую логику и хран�
     private static final int FIELD_WIDTH = 4; //ширина игрового поля
 
     private Tile[][] gameTiles; //игровое поле
+    protected int score; //игровой счёт
+    protected int maxTile; //значение самое большой плитки
 
     public Model() {
         resetGameTiles();
@@ -45,5 +47,32 @@ public class Model { //содержит игровую логику и хран�
         }
 
         return emptyTiles;
+    }
+
+    private void compressTiles(Tile[] tiles){ //сжатие плиток
+        for (int i = 0; i < tiles.length; i++){
+            for (int j = 0; j < tiles.length - 1; j++){
+                if (tiles[j].isEmpty()){
+                    Tile temp = tiles[j];
+                    tiles[j] = tiles[j+1];
+                    tiles[j+1] = temp;
+                }
+            }
+        }
+    }
+
+    private void mergeTiles(Tile[] tiles){ //слияние плиток
+        for (int i = 0; i < tiles.length - 1; i++){
+            if (tiles[i].value == tiles[i+1].value){
+                tiles[i].value *= 2;
+                tiles[i+1].value = 0;
+
+                if (tiles[i].value > maxTile) //проверяем является ли новая плитка максимальной на поле
+                    maxTile = tiles[i].value;
+
+                score += tiles[i].value; //увеличиваем счёт
+            }
+        }
+        compressTiles(tiles);
     }
 }
